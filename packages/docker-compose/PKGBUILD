@@ -1,0 +1,18 @@
+# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+pkgname=docker-compose
+pkgver=2.2.2
+pkgrel=1
+pkgdesc="Define and run multi-container applications with Docker"
+arch=('x86_64')
+url='https://github.com/docker/compose'
+
+source=("${pkgname}::${url}/releases/download/v${pkgver}/${pkgname}-linux-${CARCH}")
+sha256sums=('SKIP')
+
+package() {
+  install -Dm 755 "./${pkgname}" "${pkgdir}/usr/lib/docker/cli-plugins/${pkgname}"
+  install -d "${pkgdir}/usr/bin/"
+  ln -s "/usr/lib/docker/cli-plugins/${pkgname}" "${pkgdir}/usr/bin/${pkgname}"
+}
+
+# vim: set ts=2 sw=2 expandtab noet:
