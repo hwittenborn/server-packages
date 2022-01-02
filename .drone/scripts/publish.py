@@ -9,6 +9,7 @@ from sys import argv
 
 pkgname = argv[1]
 proget_api_key = environ["proget_api_key"]
+proget_server = environ["proget_server"]
 
 chdir(pkgname)
 print(f"INFO: Building '{pkgname}'...")
