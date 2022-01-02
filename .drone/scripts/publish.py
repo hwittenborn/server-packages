@@ -13,7 +13,7 @@ proget_api_key = environ["proget_api_key"]
 chdir(pkgname)
 print(f"INFO: Building '{pkgname}'...")
 
-if subprocess.run(["makedeb", "-s", "--noconfirm"]).returncode != 0:
+if subprocess.run(["makedeb", "-s", "--no-confirm"]).returncode != 0:
     print(f"ERROR: Failed to build '{pkgname}'.")
     exit()
 
