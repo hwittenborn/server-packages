@@ -10,7 +10,7 @@ local buildAndPublish() = {
 	    "sudo apt-get update",
 	    "sudo -E apt-get install python3-requests python3 -y",
             "cd packages/",
-            "for i in *; do ../.drone/scripts/publish.py \"${i}\"; done"
+            "for i in *; do ../.drone/scripts/publish.py \"$${i}\"; done"
         ]
     }]
 };
