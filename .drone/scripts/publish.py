@@ -5,6 +5,7 @@ import subprocess
 
 from os import chdir, environ, listdir
 from os.path import isfile
+from requests.auth import HTTPBasicAuth
 from sys import argv
 
 pkgname = argv[1]
