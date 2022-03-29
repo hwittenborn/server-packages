@@ -28,10 +28,15 @@ jobs:
         working-directory: makedeb/
         run: |
           sudo apt install $(find ./ -maxdepth 1 -name '*.deb') -y
+      
+      - name: Clone 'server-packages' repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          path: server-packages
 
       - name: Build packages       
         run: |
-          git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
           mkdir debs/
           cd server-packages/
           git checkout main
@@ -58,8 +63,6 @@ jobs:
           gzip -k -f Packages
           apt-ftparchive release . > Release
 
-          git config --global user.name "Hunter Wittenborn"
-          git config --global user.email "hunter@hunterwittenborn.com"
           git add ./
           git commit -m "Updated packages"
           git push
