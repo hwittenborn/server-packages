@@ -3,7 +3,9 @@ pkgname=drone-runner-exec
 pkgver=1.0.0beta
 _pkgver='1.0.0-beta.9'
 pkgrel=1
+pkgdesc='Drone pipeline runner that executes builds directly on the host machine'
 arch=('x86_64')
+url='https://docs.drone.io/runner/exec/'
 
 source=(
     "https://github.com/drone-runners/drone-runner-exec/releases/download/v${_pkgver}/drone_runner_exec_linux_amd64.tar.gz"
