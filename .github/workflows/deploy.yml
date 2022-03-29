@@ -36,7 +36,7 @@ jobs:
 
       - name: Build packages       
         run: |
-          cp "${GITHUB_WORKSPACE}/server-packages/" ./server-packages/ -r
+          cp "${GITHUB_WORKSPACE}/" ./server-packages/ -r
           mkdir debs/
           cd server-packages/
           git checkout main
