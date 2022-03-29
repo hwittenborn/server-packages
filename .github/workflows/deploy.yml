@@ -1,0 +1,22 @@
+name: Deploy packages
+on: {"push", "pull_request"}
+env: {"DEBIAN_FRONTEND": "noninteractive"}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone makedeb
+        run: |
+          git clone "${GITHUB_SERVER_URL}/makedeb/makedeb"
+          cd makedeb/
+          git checkout stable
+
+      - name: Install needed dependencies
+        run: NO_SUDO=1 .drone/scripts/install-deps.sh
+
+      - name: Build makedeb
+        run: .drone/scripts/build-native.sh
+
+      - name: Install makedeb
+        run: |
+          apt install $(find ./ -maxdepth 1 -name '*.deb') -y
