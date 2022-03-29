@@ -13,7 +13,11 @@ jobs:
 
       - name: Install needed dependencies
         working-directory: makedeb/
-        run: .drone/scripts/install-deps.sh
+        run: |
+          # Prevent the 'ci-utils' package from being installed.
+          curl() { true ; }
+          export -f curl
+          .drone/scripts/install-deps.sh
 
       - name: Build makedeb
         working-directory: makedeb/
