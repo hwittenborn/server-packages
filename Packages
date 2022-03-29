@@ -5,9 +5,9 @@ Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 Installed-Size: 25423
 Filename: ./docker-compose_2.3.3-1_amd64.deb
 Size: 8863806
-MD5sum: 88865b30f7735a044c24c8e705755620
-SHA1: 2044fc7fc585e25cf6edd150256feb0dd475091c
-SHA256: 5e1006e0a91b9c9efff3153d7e7496ce29e7e9d1dea09dcf956cb38418463dbc
+MD5sum: 01b13351d5f8191f522a8be02b211224
+SHA1: a7f6b7a4d3d907f993c0e722a1c7ecb74d290c0f
+SHA256: 235f2a4614f7b8b7deb1eb9705a0bc4f351509416e3b4d906a80bd207148e84c
 Homepage: https://github.com/docker/compose
 Description: Define and run multi-container applications with Docker
 
@@ -17,10 +17,23 @@ Architecture: amd64
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 Installed-Size: 13157
 Filename: ./drone-cli_1.4.0-1_amd64.deb
-Size: 4556114
-MD5sum: 2d566ed1cb465f57a6beec2ea2b830df
-SHA1: 91d6806c0db3776dc6da53d186d7b268792ff438
-SHA256: 469f2efa8307f6255397c245d9c2381687301deda7f8091862a22d829fc9a9d0
+Size: 4556112
+MD5sum: 96dbda6533c6aab3a097f1c0773b9e54
+SHA1: 0b9cabf3ed283ac70d152ebe603a2e43a7ac769c
+SHA256: dc02a71babfdb664073aaa470390e6da9a83e68ef6934d2a0672487618471a3a
 Homepage: https://docs.drone.io/cli
 Description: Command Line Tools for Drone CI
+
+Package: drone-runner-exec
+Version: 1.0.0beta-1
+Architecture: amd64
+Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Installed-Size: 10545
+Filename: ./drone-runner-exec_1.0.0beta-1_amd64.deb
+Size: 4237510
+MD5sum: 73607c331beee4d9c4ac2b7909be7b09
+SHA1: 95b79f7859b9eae0431a44de303556e73dd10bd5
+SHA256: 00abf6495d81cb6f94d5e87bbfc058c890035555b214a2e77e3b0c35bfce70e5
+Homepage: https://docs.drone.io/runner/exec/
+Description: Drone pipeline runner that executes builds directly on the host machine
 
