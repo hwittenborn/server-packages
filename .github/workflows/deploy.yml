@@ -18,6 +18,7 @@ jobs:
           curl() { true ; }
           export -f curl
           .drone/scripts/install-deps.sh
+          sudo apt install dpkg-dev apt-utils gzip -y
 
       - name: Build makedeb
         working-directory: makedeb/
@@ -39,8 +40,23 @@ jobs:
           for i in *; do
             cd "${i}/"
             makedeb -s --no-confirm
-            cp *.deb ../../debs/
+            cp *.deb ../../../debs/
             cd ../
           done
           
           cd ../
+
+      - name: Deploy packages
+        run : |
+          git restore ./
+          git checkout deploy
+          rm * -rf
+
+          cp ../debs/* ./
+          dpkg-scanpackages --multiversion . > Packages
+          gzip -k -f Packages
+          apt-ftparchive release . > Release
+
+          git add ./
+          git commit -m "Updated packages"
+          git push
