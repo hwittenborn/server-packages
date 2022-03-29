@@ -47,6 +47,7 @@ jobs:
           cd ../
 
       - name: Deploy packages
+        working-directory: server-packages/
         run : |
           git restore ./
           git checkout deploy
