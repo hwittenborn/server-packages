@@ -12,11 +12,14 @@ jobs:
           git checkout stable
 
       - name: Install needed dependencies
+        working-directory: makedeb/
         run: NO_SUDO=1 .drone/scripts/install-deps.sh
 
       - name: Build makedeb
+        working-directory: makedeb/
         run: .drone/scripts/build-native.sh
 
       - name: Install makedeb
+        working-directory: makedeb/
         run: |
           apt install $(find ./ -maxdepth 1 -name '*.deb') -y
