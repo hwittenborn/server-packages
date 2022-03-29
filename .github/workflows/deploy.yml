@@ -28,11 +28,13 @@ jobs:
         working-directory: makedeb/
         run: |
           sudo apt install $(find ./ -maxdepth 1 -name '*.deb') -y
-          
+
+      - name: Checkout server-packages repo
+        uses: actions/checkout@v3
+
       - name: Build packages       
         run: |
           mkdir debs/
-          git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
           cd server-packages/
           git checkout main
           
