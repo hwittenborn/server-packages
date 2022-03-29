@@ -1,0 +1,20 @@
+# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+pkgname=drone-runner-exec
+pkgver=1.0.0beta
+_pkgver='1.0.0-beta.9'
+pkgrel=1
+arch=('x86_64')
+
+source=(
+    "https://github.com/drone-runners/drone-runner-exec/releases/download/v${_pkgver}/drone_runner_exec_linux_amd64.tar.gz"
+    'drone-runner-exec.service'
+)
+sha1sums=(
+    'f3d37931986c45d296ffa1db1fcbb49619fd1b90'
+    'SKIP'
+)
+
+package() {
+    install -Dm 755 drone-runner-exec "${pkgdir}/usr/bin/drone-runner-exec"
+    install -Dm 644 drone-runner-exec.service "${pkgdir}/etc/systemd/system/drone-runner-exec.service"
+}
