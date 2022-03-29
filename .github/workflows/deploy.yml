@@ -31,9 +31,12 @@ jobs:
 
       - name: Checkout server-packages repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Build packages       
         run: |
+          cp "${GITHUB_WORKSPACE}/server-packages/" ./server-packages/ -r
           mkdir debs/
           cd server-packages/
           git checkout main
