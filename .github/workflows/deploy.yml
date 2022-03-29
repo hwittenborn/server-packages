@@ -1,0 +1,29 @@
+name: Deploy packages
+on: {"push", "pull_request"}
+env: {"DEBIAN_FRONTEND": "noninteractive"}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone makedeb
+        run: |
+          git clone "${GITHUB_SERVER_URL}/makedeb/makedeb"
+          cd makedeb/
+          git checkout stable
+
+      - name: Install needed dependencies
+        working-directory: makedeb/
+        run: |
+          # Prevent the 'ci-utils' package from being installed.
+          curl() { true ; }
+          export -f curl
+          .drone/scripts/install-deps.sh
+
+      - name: Build makedeb
+        working-directory: makedeb/
+        run: release_type=stable pkgname=makedeb .drone/scripts/build-native.sh
+
+      - name: Install makedeb
+        working-directory: makedeb/
+        run: |
+          sudo apt install $(find ./ -maxdepth 1 -name '*.deb') -y
