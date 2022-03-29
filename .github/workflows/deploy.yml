@@ -29,11 +29,6 @@ jobs:
         run: |
           sudo apt install $(find ./ -maxdepth 1 -name '*.deb') -y
 
-      - name: Checkout server-packages repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
       - name: Build packages       
         run: |
           git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
