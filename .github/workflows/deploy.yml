@@ -13,7 +13,7 @@ jobs:
 
       - name: Install needed dependencies
         working-directory: makedeb/
-        run: NO_SUDO=1 .drone/scripts/install-deps.sh
+        run: .drone/scripts/install-deps.sh
 
       - name: Build makedeb
         working-directory: makedeb/
@@ -22,4 +22,4 @@ jobs:
       - name: Install makedeb
         working-directory: makedeb/
         run: |
-          apt install $(find ./ -maxdepth 1 -name '*.deb') -y
+          sudo apt install $(find ./ -maxdepth 1 -name '*.deb') -y
