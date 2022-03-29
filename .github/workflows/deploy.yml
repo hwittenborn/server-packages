@@ -21,7 +21,7 @@ jobs:
 
       - name: Build makedeb
         working-directory: makedeb/
-        run: .drone/scripts/build-native.sh
+        run: release_type=stable pkgname=makedeb .drone/scripts/build-native.sh
 
       - name: Install makedeb
         working-directory: makedeb/
