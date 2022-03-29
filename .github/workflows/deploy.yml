@@ -36,7 +36,7 @@ jobs:
 
       - name: Build packages       
         run: |
-          cp "${GITHUB_WORKSPACE}/" ./server-packages/ -r
+          git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
           mkdir debs/
           cd server-packages/
           git checkout main
@@ -63,6 +63,8 @@ jobs:
           gzip -k -f Packages
           apt-ftparchive release . > Release
 
+          git config --global user.name "Hunter Wittenborn"
+          git config --global user.email "hunter@hunterwittenborn.com"
           git add ./
           git commit -m "Updated packages"
           git push
