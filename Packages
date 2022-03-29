@@ -1,0 +1,26 @@
+Package: docker-compose
+Version: 2.3.3-1
+Architecture: amd64
+Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Installed-Size: 25423
+Filename: ./docker-compose_2.3.3-1_amd64.deb
+Size: 8863806
+MD5sum: 88865b30f7735a044c24c8e705755620
+SHA1: 2044fc7fc585e25cf6edd150256feb0dd475091c
+SHA256: 5e1006e0a91b9c9efff3153d7e7496ce29e7e9d1dea09dcf956cb38418463dbc
+Homepage: https://github.com/docker/compose
+Description: Define and run multi-container applications with Docker
+
+Package: drone-cli
+Version: 1.4.0-1
+Architecture: amd64
+Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Installed-Size: 13157
+Filename: ./drone-cli_1.4.0-1_amd64.deb
+Size: 4556114
+MD5sum: 2d566ed1cb465f57a6beec2ea2b830df
+SHA1: 91d6806c0db3776dc6da53d186d7b268792ff438
+SHA256: 469f2efa8307f6255397c245d9c2381687301deda7f8091862a22d829fc9a9d0
+Homepage: https://docs.drone.io/cli
+Description: Command Line Tools for Drone CI
+
