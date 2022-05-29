@@ -5,59 +5,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone makedeb
+      - name: Setup Prebuilt-MPR APT repository
         run: |
-          git clone "${GITHUB_SERVER_URL}/makedeb/makedeb"
-          cd makedeb/
-          git checkout stable
+          curl -q 'https://proget.makedeb.org/debian-feeds/prebuilt-mpr.pub' | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
+          echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.makedeb.org prebuilt-mpr focal" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list
+          sudo apt update
 
-      - name: Install needed dependencies
-        working-directory: makedeb/
-        run: |                                       
-          # Prevent the 'ci-utils' package from being installed.
-          curl() { true ; }
-          export -f curl
-          .drone/scripts/install-deps.sh
-          sudo apt install dpkg-dev apt-utils gzip -y
-
-      - name: Build makedeb
-        working-directory: makedeb/
-        run: release_type=stable pkgname=makedeb .drone/scripts/build-native.sh
-
-      - name: Install makedeb
-        working-directory: makedeb/
-        run: |
-          sudo apt install $(find ./ -maxdepth 1 -name '*.deb') -y
-      
       - name: Clone 'server-packages' repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          path: server-packages
 
-      - name: Build packages       
+      - name: Clone packages from Prebuilt-MPR
         run: |
-          mkdir debs/
-          cd server-packages/
-          git checkout main
-          
-          cd packages/
-          for i in *; do
-            cd "${i}/"
-            makedeb -s --no-confirm
-            cp *.deb ../../../debs/
-            cd ../
-          done
-          
           cd ../
+          mkdir debs/
+          mapfile -t packages < <(cat server-packages/packages.txt)
+
+          for pkg in "${packages[@]}"; do
+            pkgname="$(echo "${pkg}" | sed 's|=.*||')"
+            version="$(echo "${pkg}" | sed 's|.*=||')"
+
+            apt-get download "${pkgname}=${version}"
+            mv "${pkgname}_${version}_amd64.deb" debs/
+          done
 
       - name: Deploy packages
-        working-directory: server-packages/
         run : |
           git restore ./
           git checkout deploy
           rm * -rf
-
+          
           cp ../debs/* ./
           dpkg-scanpackages --multiversion . > Packages
           gzip -k -f Packages
