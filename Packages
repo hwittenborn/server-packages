@@ -1,39 +1,41 @@
 Package: docker-compose
-Version: 2.3.3-1
+Version: 2.5.1-1
 Architecture: amd64
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Installed-Size: 25423
-Filename: ./docker-compose_2.3.3-1_amd64.deb
-Size: 8863806
-MD5sum: 01b13351d5f8191f522a8be02b211224
-SHA1: a7f6b7a4d3d907f993c0e722a1c7ecb74d290c0f
-SHA256: 235f2a4614f7b8b7deb1eb9705a0bc4f351509416e3b4d906a80bd207148e84c
-Homepage: https://github.com/docker/compose
+Filename: ./docker-compose_2.5.1-1_amd64.deb
+Size: 9320328
+MD5sum: a07002c296a008095ea2b74e3a0fc044
+SHA1: 016117d44d8e4546daae458903ef335ad27bb7fc
+SHA256: 9bbc6d8f4f2c10fe3bdb0eddc331edaa2d78ea10afad63ee1885e7a4b41a0191
+Homepage: https://docs.docker.com/compose/
 Description: Define and run multi-container applications with Docker
+License: Apache-2.0
 
 Package: drone-cli
-Version: 1.4.0-1
+Version: 1.5.0-1
 Architecture: amd64
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Installed-Size: 13157
-Filename: ./drone-cli_1.4.0-1_amd64.deb
-Size: 4556112
-MD5sum: 96dbda6533c6aab3a097f1c0773b9e54
-SHA1: 0b9cabf3ed283ac70d152ebe603a2e43a7ac769c
-SHA256: dc02a71babfdb664073aaa470390e6da9a83e68ef6934d2a0672487618471a3a
+Depends: golang-go (>= 1.16)
+Conflicts: drone-cli-bin
+Filename: ./drone-cli_1.5.0-1_amd64.deb
+Size: 5158228
+MD5sum: a587e9a02d2263120b96eeab6f7bd70b
+SHA1: 427df9b15223d66509d2ba83b1cac4dc9ce5ec51
+SHA256: 41c7b6db65c0f62fe4a013751aaa9df46d24c0279346626c51062a9121b5f79a
 Homepage: https://docs.drone.io/cli
 Description: Command Line Tools for Drone CI
+License: Apache-2.0
 
 Package: drone-runner-exec
-Version: 1.0.0beta-1
+Version: 1.0.0-1
 Architecture: amd64
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Installed-Size: 10545
-Filename: ./drone-runner-exec_1.0.0beta-1_amd64.deb
-Size: 4237510
-MD5sum: 73607c331beee4d9c4ac2b7909be7b09
-SHA1: 95b79f7859b9eae0431a44de303556e73dd10bd5
-SHA256: 00abf6495d81cb6f94d5e87bbfc058c890035555b214a2e77e3b0c35bfce70e5
-Homepage: https://docs.drone.io/runner/exec/
-Description: Drone pipeline runner that executes builds directly on the host machine
+Filename: ./drone-runner-exec_1.0.0-1_amd64.deb
+Size: 3818096
+MD5sum: bff29f42f1b45c49b0d9bac2494ba594
+SHA1: bf4e59fa6d4243165ad2b9a8b0d064cf59887adf
+SHA256: d24754ffedfc179c27351d74e3502c2e3fab680bc2bf3e371a206fe02678a51f
+Homepage: https://docs.drone.io/runner/exec/overview
+Description: Execute Drone CI pipelines directly on a host machine
+License: Polyform-Small-Business-1.0.0, Polyform-Free-Trial-1.0.0
 
