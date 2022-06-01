@@ -1,12 +1,12 @@
 Package: docker-compose
-Version: 2.5.1-1
+Version: 2.6.0-1
 Architecture: amd64
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Filename: ./docker-compose_2.5.1-1_amd64.deb
-Size: 9320328
-MD5sum: a07002c296a008095ea2b74e3a0fc044
-SHA1: 016117d44d8e4546daae458903ef335ad27bb7fc
-SHA256: 9bbc6d8f4f2c10fe3bdb0eddc331edaa2d78ea10afad63ee1885e7a4b41a0191
+Filename: ./docker-compose_2.6.0-1_amd64.deb
+Size: 9321112
+MD5sum: 67d297c553409ae0d341880bb9a6bae3
+SHA1: f1832ce642936ecd0f30a45b409d546b953e36b5
+SHA256: d6467dd6e4db1c88e28c75b890117175d65f546151a5145aa960029ecb3f84b5
 Homepage: https://docs.docker.com/compose/
 Description: Define and run multi-container applications with Docker
 License: Apache-2.0
