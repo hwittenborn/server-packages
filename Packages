@@ -1,53 +1,26 @@
 Package: docker-compose
-Version: 2.4.1-1
+Version: 2.6.1-1
 Architecture: amd64
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Filename: ./docker-compose_2.4.1-1_amd64.deb
-Size: 9312174
-MD5sum: 76778ff6a8b0401b0dc88ef81a9153d2
-SHA1: 6db612901aff30917284e294d4e57d20c9f7aed3
-SHA256: bbbba5188015a4240eeec9cded59679cd1ecd7d66d222f79a306ff951bee1ed8
-Homepage: https://docs.docker.com/compose/
-Description: Define and run multi-container applications with Docker
-License: Apache-2.0
-
-Package: docker-compose
-Version: 2.5.0-1
-Architecture: amd64
-Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Filename: ./docker-compose_2.5.0-1_amd64.deb
-Size: 9317734
-MD5sum: bacc937d4e0baca74e8f866a7e7fa769
-SHA1: f7a02b5f5b12f293c5ea707e19cc2391398ed3a3
-SHA256: 253698ecd22f3e9926984c9861fe0ac69613647e3582451a9421788785823d4e
-Homepage: https://docs.docker.com/compose/
-Description: Define and run multi-container applications with Docker
-License: Apache-2.0
-
-Package: docker-compose
-Version: 2.6.0-1
-Architecture: amd64
-Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Filename: ./docker-compose_2.6.0-1_amd64.deb
-Size: 9321112
-MD5sum: 67d297c553409ae0d341880bb9a6bae3
-SHA1: f1832ce642936ecd0f30a45b409d546b953e36b5
-SHA256: d6467dd6e4db1c88e28c75b890117175d65f546151a5145aa960029ecb3f84b5
+Filename: ./docker-compose_2.6.1-1_amd64.deb
+Size: 9225478
+MD5sum: fa8474d601c93b74199510b87fd441e8
+SHA1: a5629ae7fd263a7ef6fd12609229bd883a3de917
+SHA256: 7d6b8a4163486c1a8405fbf81d51c5f06c4bc14df0997fa313f09273989d7946
 Homepage: https://docs.docker.com/compose/
 Description: Define and run multi-container applications with Docker
 License: Apache-2.0
 
 Package: drone-cli
-Version: 1.5.0-1
+Version: 1.5.0-2
 Architecture: amd64
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-Depends: golang-go (>= 1.16)
 Conflicts: drone-cli-bin
-Filename: ./drone-cli_1.5.0-1_amd64.deb
-Size: 5158228
-MD5sum: a587e9a02d2263120b96eeab6f7bd70b
-SHA1: 427df9b15223d66509d2ba83b1cac4dc9ce5ec51
-SHA256: 41c7b6db65c0f62fe4a013751aaa9df46d24c0279346626c51062a9121b5f79a
+Filename: ./drone-cli_1.5.0-2_amd64.deb
+Size: 5158876
+MD5sum: b9f3e890462998eb55eb49a2ed60a7b5
+SHA1: 864ee33e78dce13ab7c135d8bc725af07eaa5d5f
+SHA256: 19fe0589b6b60cd10f59a1bb2d9b86756790529a616fe51cb5b4a8975e5f3530
 Homepage: https://docs.drone.io/cli
 Description: Command Line Tools for Drone CI
 License: Apache-2.0
@@ -64,4 +37,17 @@ SHA256: d24754ffedfc179c27351d74e3502c2e3fab680bc2bf3e371a206fe02678a51f
 Homepage: https://docs.drone.io/runner/exec/overview
 Description: Execute Drone CI pipelines directly on a host machine
 License: Polyform-Small-Business-1.0.0, Polyform-Free-Trial-1.0.0
+
+Package: mcrcon
+Version: 0.7.2-1
+Architecture: amd64
+Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Filename: ./mcrcon_0.7.2-1_amd64.deb
+Size: 8182
+MD5sum: c6124e5640fd06829fc77b90f4c38322
+SHA1: 43fa1d951cbb4cf968096811f2c4bc5a4e9e3058
+SHA256: c7e44fdf991a4afb0163bde5772885cd58a577b61520060317b755a7c542a05d
+Homepage: https://github.com/Tiiffi/mcrcon
+Description: Rcon client for Minecraft
+License: Zlib
 
