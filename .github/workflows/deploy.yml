@@ -1,25 +1,33 @@
 name: Deploy packages
-on: {"push", "pull_request"}
-env: {"DEBIAN_FRONTEND": "noninteractive"}
+on: push
+env:
+  WASABI_BUCKET: 'server-packages.hunterwittenborn.com'
 jobs:
-  build:
+  deploy:
+    name: Deploy Packages
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Prebuilt-MPR APT repository
-        run: |
-          curl -q 'https://proget.makedeb.org/debian-feeds/prebuilt-mpr.pub' | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
-          echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.makedeb.org prebuilt-mpr jammy" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list
-          sudo apt update
-
-      - name: Clone 'server-packages' repository
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-
-      - name: Clone packages from Prebuilt-MPR
+          path: server-packages
+      - name: Set up Prebuilt-MPR APT repository
+        uses: makedeb/setup-makedeb@main
+        with:
+          makedeb-repo: false
+          pbmpr-repo: true
+      - name: Install rclone
+        run: sudo apt-get install rclone -y
+      - name: Set up rclone config
         run: |
-          cd ../
-          mkdir debs/
+          rclone config create wasabi s3 \
+          provider='Wasabi' \
+          access_key_id="${{ secrets.WASABI_ACCESS_KEY_ID }}" \
+          secret_access_key="${{ secrets.WASABI_ACCESS_KEY_SECRET }}" \
+          endpoint='s3.wasabisys.com'
+      - name: Download packages from Prebuilt-MPR
+        run: |
+          mkdir -p apt/debs/
           mapfile -t packages < <(cat server-packages/packages.txt)
 
           for pkg in "${packages[@]}"; do
@@ -27,22 +35,21 @@ jobs:
             version="$(echo "${pkg}" | sed 's|.*=||')"
 
             apt-get download "${pkgname}=${version}"
-            mv "${pkgname}_${version}_amd64.deb" debs/
+            mv "${pkgname}_${version}_amd64.deb" apt/debs/
           done
-
-      - name: Deploy packages
-        run : |
-          git restore ./
-          git checkout deploy
-          rm * -rf
-          
-          cp ../debs/* ./
-          dpkg-scanpackages --multiversion . > Packages
+      - name: Prepare APT repository directory
+        run: |
+          cd apt/
+          dpkg-scanpackages --multiversion debs/ > Packages
           gzip -k -f Packages
-          apt-ftparchive release . > Release
-          
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add ./
-          git commit -m "Updated packages"
-          git push
+          apt-ftparchive release debs/ > Release
+          cd ../
+      - name: Purge S3 content
+        run: |
+          mapfile -t path < <(rclone lsf "wasabi:${WASABI_BUCKET}")
+
+          for path in "${path[@]}"; do
+            rclone purge "wasabi:${WASABI_BUCKET}/${path}"
+          done
+      - name: Upload new APT repository directory
+        run: rclone copy -v ./apt "wasabi:${WASABI_BUCKET}/apt"
