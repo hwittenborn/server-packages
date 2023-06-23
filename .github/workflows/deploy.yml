@@ -1,21 +1,23 @@
 name: Deploy packages
-on: {"push", "pull_request"}
+on:
+  push:
+    branches: [main]
 env: {"DEBIAN_FRONTEND": "noninteractive"}
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Prebuilt-MPR APT repository
-        run: |
-          curl -q 'https://proget.makedeb.org/debian-feeds/prebuilt-mpr.pub' | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
-          echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.makedeb.org prebuilt-mpr jammy" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list
-          sudo apt update
-
       - name: Clone 'server-packages' repository
         uses: actions/checkout@v3
+      - name: Setup Prebuilt-MPR APT repository
+        uses: makedeb/setup-makedeb@main
         with:
-          fetch-depth: 0
-
+          pbmpr-repo: true
       - name: Clone packages from Prebuilt-MPR
         run: |
           cd ../
@@ -29,20 +31,15 @@ jobs:
             apt-get download "${pkgname}=${version}"
             mv "${pkgname}_${version}_amd64.deb" debs/
           done
-
-      - name: Deploy packages
+      - name: Set up APT repository
         run : |
-          git restore ./
-          git checkout deploy
-          rm * -rf
-          
-          cp ../debs/* ./
+          cd ../debs
           dpkg-scanpackages --multiversion . > Packages
           gzip -k -f Packages
           apt-ftparchive release . > Release
-          
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add ./
-          git commit -m "Updated packages"
-          git push
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ../debs
+      - name: Deploy site
+        uses: actions/deploy-pages@v1
