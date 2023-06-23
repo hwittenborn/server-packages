@@ -12,9 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone 'server-packages' repository
+      - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Prebuilt-MPR APT repository
+      - name: Setup makedeb and Prebuilt-MPR APT repositories
         uses: makedeb/setup-makedeb@main
         with:
           pbmpr-repo: true
@@ -22,7 +22,7 @@ jobs:
         run: |
           cd ../
           mkdir debs/
-          mapfile -t packages < <(cat server-packages/packages.txt)
+          mapfile -t packages < <(cat server-packages/prebuilt-mpr-pkgs.txt)
 
           for pkg in "${packages[@]}"; do
             pkgname="$(echo "${pkg}" | sed 's|=.*||')"
@@ -30,6 +30,15 @@ jobs:
 
             apt-get download "${pkgname}=${version}"
             mv "${pkgname}_${version}_amd64.deb" debs/
+          done
+      - name: Build custom packages
+        run: |
+          cd pkgs/
+          for pkg in *; do
+            cd "${pkg}"
+            makedeb -s --no-confirm --pass-env
+            cp *.deb ../../../debs/
+            cd ../
           done
       - name: Set up APT repository
         run : |
