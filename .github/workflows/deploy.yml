@@ -5,6 +5,7 @@ on:
 env:
   DEBIAN_FRONTEND: 'noninteractive'
   WASABI_BUCKET: 'server-packages.hunterwittenborn.com'
+  WASABI_ENDPOINT: 's3.wasabisys.com'
 
 jobs:
   deploy:
@@ -17,8 +18,15 @@ jobs:
         uses: makedeb/setup-makedeb@main
         with:
           pbmpr-repo: true
-      - name: Install aptly
-        run: sudo apt-get install aptly -y
+      - name: Install needed packages
+        run: sudo apt-get install aptly rclone -y
+      - name: Set up rclone config
+        run: |
+          rclone config create wasabi s3 \
+          provider='Wasabi' \
+          access_key_id="${{ secrets.WASABI_ACCESS_KEY_ID }}" \
+          secret_access_key="${{ secrets.WASABI_ACCESS_KEY_SECRET }}" \
+          endpoint="${WASABI_ENDPOINT}"
       - name: Set up aptly config
         run: |
           echo "{
@@ -26,7 +34,7 @@ jobs:
               \"server-packages\": {
                 \"region\": \"us-east-1\",
                 \"bucket\": \"${WASABI_BUCKET}\",
-                \"endpoint\": \"s3.wasabisys.com\",
+                \"endpoint\": \"${WASABI_ENDPOINT}\",
                 \"awsAccessKeyID\": \"${{ secrets.WASABI_ACCESS_KEY_ID }}\",
                 \"awsSecretAccessKey\": \"${{ secrets.WASABI_ACCESS_KEY_SECRET }}\"
               }
@@ -57,11 +65,6 @@ jobs:
             cd ../
           done
       - name: Purge S3 content
-        run: |
-          mapfile -t path < <(rclone lsf "wasabi:${WASABI_BUCKET}")
-
-          for path in "${path[@]}"; do
-            rclone purge "wasabi:${WASABI_BUCKET}/${path}"
-          done
+        run: rclone purge "wasabi:${WASABI_BUCKET}/apt"
       - name: Upload new APT repository
         run: aptly publish repo -distribution=jammy -component=main -skip-signing server-packages 's3:server-packages:apt'
