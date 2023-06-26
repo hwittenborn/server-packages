@@ -2,14 +2,13 @@ name: Deploy packages
 on:
   push:
     branches: [main]
-env: {"DEBIAN_FRONTEND": "noninteractive"}
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+env:
+  DEBIAN_FRONTEND: 'noninteractive'
+  WASABI_BUCKET: 'server-packages.hunterwittenborn.com'
 
 jobs:
-  build:
+  deploy:
+    name: Deploy Packages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -18,6 +17,15 @@ jobs:
         uses: makedeb/setup-makedeb@main
         with:
           pbmpr-repo: true
+      - name: Install rclone
+        run: sudo apt-get install rclone -y
+      - name: Set up rclone config
+        run: |
+          rclone config create wasabi s3 \
+          provider='Wasabi' \
+          access_key_id="${{ secrets.WASABI_ACCESS_KEY_ID }}" \
+          secret_access_key="${{ secrets.WASABI_ACCESS_KEY_SECRET }}" \
+          endpoint='s3.wasabisys.com'
       - name: Clone packages from Prebuilt-MPR
         run: |
           cd ../
@@ -46,9 +54,12 @@ jobs:
           dpkg-scanpackages --multiversion . > Packages
           gzip -k -f Packages
           apt-ftparchive release . > Release
-      - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ../debs
-      - name: Deploy site
-        uses: actions/deploy-pages@v1
+      - name: Purge S3 content
+        run: |
+          mapfile -t path < <(rclone lsf "wasabi:${WASABI_BUCKET}")
+
+          for path in "${path[@]}"; do
+            rclone purge "wasabi:${WASABI_BUCKET}/${path}"
+          done
+      - name: Upload new APT repository directory
+        run: rclone copy -v ../debs "wasabi:${WASABI_BUCKET}/apt"
