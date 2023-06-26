@@ -1,5 +1,2 @@
-comb=0.2.0-1
+cloudflare-warp=2023.3.470-1
 docker-compose=2.10.2-1
-drone-cli=1.5.0-2
-drone-runner-exec=1.0.0-1
-mcrcon=0.7.2-1
