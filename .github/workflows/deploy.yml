@@ -17,16 +17,24 @@ jobs:
         uses: makedeb/setup-makedeb@main
         with:
           pbmpr-repo: true
-      - name: Install rclone
-        run: sudo apt-get install rclone -y
-      - name: Set up rclone config
+      - name: Install aptly
+        run: sudo apt-get install aptly -y
+      - name: Set up aptly config
         run: |
-          rclone config create wasabi s3 \
-          provider='Wasabi' \
-          access_key_id="${{ secrets.WASABI_ACCESS_KEY_ID }}" \
-          secret_access_key="${{ secrets.WASABI_ACCESS_KEY_SECRET }}" \
-          endpoint='s3.wasabisys.com'
-      - name: Clone packages from Prebuilt-MPR
+          echo "{
+            \"S3PublishEndpoints\": {
+              \"server-packages\": {
+                \"region\": \"us-east-1\",
+                \"bucket\": \"${WASABI_BUCKET}\",
+                \"endpoint\": \"s3.wasabisys.com\",
+                \"awsAccessKeyID\": \"${{ secrets.WASABI_ACCESS_KEY_ID }}\",
+                \"awsSecretAccessKey\": \"${{ secrets.WASABI_ACCESS_KEY_SECRET }}\"
+              }
+            }
+          }" > ~/.aptly.conf
+      - name: Set up aptly repo
+        run: aptly repo create -distribution=jammy -component=main server-packages
+      - name: Add packages from Prebuilt-MPR
         run: |
           cd ../
           mkdir debs/
@@ -37,7 +45,7 @@ jobs:
             version="$(echo "${pkg}" | sed 's|.*=||')"
 
             apt-get download "${pkgname}=${version}"
-            mv "${pkgname}_${version}_amd64.deb" debs/
+            aptly repo add server-packages "${pkgname}_${version}_amd64.deb"
           done
       - name: Build custom packages
         run: |
@@ -45,15 +53,9 @@ jobs:
           for pkg in *; do
             cd "${pkg}"
             makedeb -s --no-confirm --pass-env
-            cp *.deb ../../../debs/
+            aptly repo add server-packages *.deb
             cd ../
           done
-      - name: Set up APT repository
-        run : |
-          cd ../debs
-          dpkg-scanpackages --multiversion . > Packages
-          gzip -k -f Packages
-          apt-ftparchive release . > Release
       - name: Purge S3 content
         run: |
           mapfile -t path < <(rclone lsf "wasabi:${WASABI_BUCKET}")
@@ -61,5 +63,5 @@ jobs:
           for path in "${path[@]}"; do
             rclone purge "wasabi:${WASABI_BUCKET}/${path}"
           done
-      - name: Upload new APT repository directory
-        run: rclone copy -v ../debs "wasabi:${WASABI_BUCKET}/apt"
+      - name: Upload new APT repository
+        run: aptly publish repo -distribution=jammy -component=main -skip-signing server-packages 's3:server-packages:apt'
