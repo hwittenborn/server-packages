@@ -1,3 +1,1 @@
-cloudflared=2023.6.1-1
-cloudflare-warp=2023.3.470-1
 docker-compose=2.10.2-1

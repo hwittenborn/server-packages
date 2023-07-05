@@ -55,15 +55,6 @@ jobs:
             apt-get download "${pkgname}=${version}"
             aptly repo add server-packages "${pkgname}_${version}_amd64.deb"
           done
-      - name: Build custom packages
-        run: |
-          cd pkgs/
-          for pkg in *; do
-            cd "${pkg}"
-            makedeb -s --no-confirm --pass-env
-            aptly repo add server-packages *.deb
-            cd ../
-          done
       - name: Purge S3 content
         run: rclone purge "wasabi:${WASABI_BUCKET}/apt"
       - name: Upload new APT repository
